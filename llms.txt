@@ -1,0 +1,51 @@
+# VoiceGremlin
+
+VoiceGremlin is a CI/CD testing tool for AI voice agents (IVAs). It places a real phone call to your voice agent, conducts a multi-turn AI-powered conversation, and returns a pass/fail result via REST API. Think "Mailosaur for voice agents" — validate your IVA programmatically in your pipeline before it hits production without having to manage tooling to interface with telephony or stream audio.
+
+## How it works
+
+1. Your CI pipeline calls `POST /api/runs` with a phone number, one or more test goals (natural-language assertions), and optionally a run_id to query.  If you don't pass run_id we will generate one in the response.
+2. For each test, VoiceGremlin dials the number, an AI caller conducts the conversation, and a judge LLM evaluates the transcript against the test goal
+3. Your CI polls `GET /api/runs/:run_id` until status is "complete", then checks pass/fail
+
+Each test goal costs 1 minute (rounded up). Tests are ephemeral — no pre-defined entities.  
+
+## API Reference
+
+- **Queue a test run**: `POST /api/runs` — body: `{ phone_number, tests: string[], target_name?, max_concurrency?, run_id? }` → 202 `{ run_id }`
+- **Get run status**: `GET /api/runs/:run_id` → `{ status: "pending"|"running"|"complete", total, passed, failed, results: [{test_goal, passed, reason}] }`
+- **Auth**: `Authorization: Bearer VGM_KEY` header
+
+Full reference: https://voicegremlin.com/docs.html
+
+## Key concepts
+
+- **Test goal**: A single natural-language sentence describing what to verify. One goal = one phone call = one minute.
+- **target_name**: Optional label for the agent being tested. Enriches the AI caller's prompt.
+- **run_id**: Customer-provided identifier (or auto-generated). Reuse returns 409.
+- **Magic numbers**: Special phone numbers for testing without real calls:
+  - `+10010010001` (SLOW) — takes 30s, always passes
+  - `+10010010002` (FAIL) — always fails
+  - `+10010010003` (CRASH) — always errors
+  - `+10010010004` (FLAKY) — 50/50 random pass/fail
+  - `+10010010005` (INSTANT) — 100ms, always passes (no LLM)
+  - `+2002002001` (simulated) — LLM-only, no TTS/STT/Telnyx, no minutes charged
+
+## Pricing
+
+| Tier | Price | Minutes | Use case |
+|------|-------|---------|----------|
+| Developer | $99/mo | 600 min | Solo dev / small team |
+| Professional | $299/mo | 2,000 min | Team with multiple IVAs |
+| Enterprise | $999/mo | 8,000 min | Multiple products / high volume |
+
+Free tier: 100 minutes one-time, expires in 14 days.
+
+## Articles
+
+- [Writing effective Voice Agent tests](https://voicegremlin.com/articles/writing-effective-tests.html) — How to write test goals that produce reliable pass/fail results. Useful when helping a user craft their test assertions.
+- [AI Disclosure laws](https://voicegremlin.com/articles/ai-disclosure-laws.html) — Which US states require AI voice disclosure and how to test for compliance. Useful when a user asks about regulatory requirements.
+
+## Quick Start
+
+- https://voicegremlin.com/quick-start.html — One-line CI setup with copyable API reference for AI assistants.
