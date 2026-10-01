@@ -7,7 +7,7 @@ CI/CD testing for AI voice agents. Drop one of these scripts into your pipeline 
 **Bash (Linux/macOS/GitHub Actions):**
 
 ```bash
-curl -sSf https://raw.githubusercontent.com/voicegremlin/voicegremlin-iva-test-automation/main/voicegremlin-ci.sh -o voicegremlin-ci.sh && chmod +x voicegremlin-ci.sh && VGM_KEY="vg_live_xxx" ./voicegremlin-ci.sh "My Company" "+15551234567" "Verify it discloses it is AI"
+curl -sSf https://raw.githubusercontent.com/voicegremlin/voicegremlin-iva-test-automation/main/voicegremlin-ci.sh -o voicegremlin-ci.sh && chmod +x voicegremlin-ci.sh && VGM_KEY="vg_live_xxx" ./voicegremlin-ci.sh "My Company" "+10010010001" "Verify that the agent discloses its AI status and audio recording on the first message"
 ```
 
 **PowerShell (Windows):**

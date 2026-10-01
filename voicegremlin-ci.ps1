@@ -1,9 +1,9 @@
 # VoiceGremlin CI Check
-# Usage: $env:VGM_KEY="vg_xxx"; ./voicegremlin-ci.ps1 -Target "SkyWay Airlines" -Phone "+15551234567" -Tests "Goal 1", "Goal 2"
+# Usage: $env:VGM_KEY="vg_xxx"; ./voicegremlin-ci.ps1 -Target "SkyWay Airlines" -Phone "+10010010001" -Tests "Goal 1", "Goal 2"
 param(
   [Parameter(Mandatory)][string]$Target,
   [Parameter(Mandatory)][string]$Phone,
-  [string[]]$Tests = @("Verify the Agent discloses it is AI"),
+  [string[]]$Tests = @("Verify that the agent discloses its AI status and audio recording on the first message"),
   [int]$MaxConcurrency = 1
 )
 

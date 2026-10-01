@@ -1,6 +1,6 @@
 #!/bin/bash
 # VoiceGremlin CI Check
-# Usage: VGM_KEY=vg_xxx ./voicegremlin-ci.sh "Target Name" "+15551234567" "Test goal 1" ["Test goal 2" ...]
+# Usage: VGM_KEY=vg_xxx ./voicegremlin-ci.sh "Target Name" "+10010010001" "Test goal 1" ["Test goal 2" ...]
 set -e
 
 VGM_KEY="${VGM_KEY:?Set VGM_KEY environment variable}"
@@ -9,7 +9,7 @@ PHONE_NUMBER="${2:?Usage: voicegremlin-ci.sh <target_name> <phone_number> <test_
 shift 2
 TESTS=("$@")
 if [ ${#TESTS[@]} -eq 0 ]; then
-  TESTS=("Verify the Agent discloses it is AI")
+  TESTS=("Verify that the agent discloses its AI status and audio recording on the first message")
 fi
 BASE_URL="${BASE_URL:-https://voicegremlin.com}"
 
